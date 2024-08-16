@@ -25,25 +25,20 @@ var collection *mongo.Collection
 func main() {
 
 	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading .env file:", err)
-	}
+
+	handleError("Error loading .env file:", err)
 
 	MONGODB_URI := os.Getenv("MONGODB_URI")
 	clientOptions := options.Client().ApplyURI(MONGODB_URI)
 	client, err := mongo.Connect(context.Background(), clientOptions)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	handleError("", err)
 
 	defer client.Disconnect(context.Background())
 
 	err = client.Ping(context.Background(), nil)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	handleError("", err)
 
 	fmt.Println("Connected to MONGODB ATLAS")
 
@@ -70,9 +65,7 @@ func getTodos(c *fiber.Ctx) error {
 
 	cursor, err := collection.Find(context.Background(), bson.M{})
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	handleError("", err)
 
 	defer cursor.Close(context.Background())
 
@@ -144,4 +137,10 @@ func deleteTodo(c *fiber.Ctx) error {
 	}
 
 	return c.Status(200).JSON(fiber.Map{"success": true})
+}
+
+func handleError(msg string, err error) {
+	if err != nil {
+		log.Fatal(msg, err)
+	}
 }

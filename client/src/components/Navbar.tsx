@@ -30,7 +30,7 @@ export default function Navbar() {
 						</Text>
 						{/* Toggle Color Mode */}
 						<Button onClick={toggleColorMode}>
-							{colorMode === "light" ? <IoMoon /> : <LuSun size={20} />}
+							{colorMode === "dark" ? <IoMoon /> : <LuSun size={20} />}
 						</Button>
 					</Flex>
 				</Flex>
